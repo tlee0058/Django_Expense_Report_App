@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>User Details</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'login/style.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link active" href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/addusers">Add a new user</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/viewusers">View other users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+
+        <h6>User Profile:</h6>
+        <div class="list-group">
+            <a href="#!" class="list-group-item list-group-item-action flex-column align-items-start active">
+                
+                <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{user.first_name}} {{user.last_name}}</h5>
+                <small>Created on: {{user.created_at}} Last modified: {{user.updated_at}}</small>
+                </div>
+                <p class="mb-1">Email: {{user.email}}</p>
+            </a>
+        </div>
+
+        <hr/>
+        <h5>Edit -</h5>
+
+        {% if messages %}
+        <div class="error_message">
+            {% for message in messages %}
+                <p >**{{ message }}**</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <h6>User Profile:</h6>
+        <div class="input-group input-group-sm" id="info">
+            
+            <form action="/showusers/{{user.id}}", method="post">
+                {% csrf_token %}
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">First Name:</span>
+                
+                <input type="text" name="first_name" value="{{user.first_name}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Last Name:</span>
+                
+                <input type="text" name="last_name" value="{{user.last_name}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Email:</span>
+                
+                <input type="email" name="email" value="{{user.email}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Password:</span>
+                
+                <input type="password" name="password" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Confirm PW:</span>
+                
+                <input type="password" name="confirm_pw" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+            
+                <input type="submit" class="btn btn-primary mb-2" value="Edit">
+                <p><a href="/users/delete/{{user.id}}"><button id="delete" type="button" class="btn btn-outline-warning">Delete</button></a></p>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

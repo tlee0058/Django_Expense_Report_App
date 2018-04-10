@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add a Project</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'login/style.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link active" href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/viewusers">View/Edit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+        {% if messages %}
+        <div class="error_message">
+            {% for message in messages %}
+                <p >**{{ message }}**</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <h6>User Profile:</h6>
+        <div class="input-group input-group-sm" id="info">
+            <form action="/register", method="post">
+            {% csrf_token %}
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">First Name:</span>
+            
+            <input type="text" name="first_name" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Last Name:</span>
+            
+            <input type="text" name="last_name" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Email:</span>
+            
+            <input type="email" name="email" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Password:</span>
+            
+            <input type="password" name="password" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Confirm PW:</span>
+            
+            <input type="password" name="confirm_pw" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            
+            <input type="submit" class="btn btn-primary mb-2" value="Add" style="margin-left: 325px;">
+            </form>
+            
+        </div>
+    </div>
+</body>
+</html>

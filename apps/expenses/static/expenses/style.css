@@ -1,0 +1,36 @@
+.content{
+    width: 560px;
+    padding: 10px;
+    margin: 10px auto 20px 50px;
+}
+.expenses {
+    
+    border: 1px double grey;
+    font-size: 0.8em;
+
+}
+
+#expenseButton {
+    margin-left: 100px;
+}
+
+#reportForm label {
+    width: 200px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    padding: 3px;
+    margin-left: 50px;
+}
+
+h5{
+    margin-left: 50px;
+}
+
+.expenses {
+    margin-top: 15px 10px;
+    border: 1px double grey;
+    padding: 5px;
+}
+

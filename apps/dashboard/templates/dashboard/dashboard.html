@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container" style="width: 860px;">
+        <nav class="navbar navbar-light" style="background-color: lightgrey;">
+            <span>Welcome {{user.first_name}}!</span>
+            <span><a href="/logout">Logout</a></span>
+        </nav>
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/dashboard" role="button" aria-haspopup="true" aria-expanded="false">
+                    Expense Report</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/addexpenses">Add</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/dashboard" role="button" aria-haspopup="true" aria-expanded="false">
+                    Project's Company Profile</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/addcompanies">Add</a>
+                    <a class="dropdown-item" href="/viewcompanies">View/Edit</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/dashboard" role="button" aria-haspopup="true" aria-expanded="false">
+                    Project Profile</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/addprojects">Add</a>
+                    <a class="dropdown-item" href="/viewprojects">View/Edit</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="/dashboard" role="button" aria-haspopup="true" aria-expanded="false">
+                    User Profile</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/addusers">Add</a>
+                    <a class="dropdown-item" href="/viewusers">View/Edit</a>
+                </div>
+            </li>
+
+        </ul>
+        <div class="media">
+            <img class="d-flex mr-3" data-src="holder.js/64x64?theme=sky" alt="64x64" src="{% static 'dashboard/Weather-PNG-HD.png' %}" data-holder-rendered="true" style="width: 64px; height: 64px;">
+            <div class="media-body">
+                <h6 style="color:grey;">Current Weather in D.C. Metro Area is</h6>
+            </div>
+            <h6 style="color:grey;">{{time}}</h6>
+        </div>
+
+        <div class="content" style="background-image: url('{% static "dashboard/report1.png" %}'); margin-right: 77px;">
+            <div class="title">
+                <h6>You have completed these expense report(s):<h6>
+            </div>
+            <div class="one">
+                {% for report in reports %}
+                    <p>{{report.id}} | <a class="links" href="view/report/{{report.id}}">{{report.name}} for {{report.period}}</a></p>
+                {% endfor %}
+            </div>
+
+        </div> 
+
+        <div class="content" style="background-image: url('{% static "dashboard/desktop1.jpg" %}');">
+            <div class="title">
+                <h6>All Current Project(s):</h6>
+            </div>
+            <div class="one">
+                {% for project in projects %}
+                    <p>{{project.id}} | <a class="links" href="project/summary/{{project.id}}">{{project.title}} {{project.project.name}} {{project.project.address}} {{project.project.city}} {{project.project.state}}</a></p>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+    
+    <script>
+        $.get("http://api.openweathermap.org/data/2.5/weather?zip=20037,us&units=imperial&APPID=10fdb0aea74606a5bb730d5fd121b565", function(res){
+            console.log(res);
+            var html_str="";
+            
+            html_str+="<h6 style='color:grey;'>" + res.main.temp + "F - " + res.weather[0].main + ", " + res.weather[0].description + "</h6>";
+
+            $('.media-body').append(html_str);
+            }, "json");
+    </script>
+</body>
+</html>

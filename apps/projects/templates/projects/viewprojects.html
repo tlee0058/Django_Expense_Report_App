@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>View/Edit Project</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'projects/style.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                <li class="nav-link">
+                    <a class="nav-link" href="/dashboard">Dashboard </a>
+                </li>
+                <li class="nav-link">
+                    <a class="nav-link" href="/addprojects">Add a new project </a>
+                </li>
+                <li class="nav-link">
+                        <a class="nav-link" href="/logout">Logout</a>
+                </li>
+                </ul>
+                <form class="/project_search", method="post">
+                    {% csrf_token %}
+                <input class="form-control mr-sm-2" type="text" placeholder="Search Project" aria-label="Search"> 
+                </form>
+            </div>
+        </nav>
+
+        <h6>Projects:</h6>
+
+        <div class="list-group">
+            {% for project in projects %}
+                <p><a href="/project/summary/{{project.id}}" class="list-group-item list-group-item-action list-group-item-info">{{project.id}} | {{project.title}} with {{project.project.name}} {{project.project.address}}, {{project.project.city}} {{project.project.state}} {{project.project.zip}} |
+                Billing code: {{project.billing_code}}</a></p>
+            {% endfor %}    
+        </div>
+
+    </div>
+</body>
+</html>

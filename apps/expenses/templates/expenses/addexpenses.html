@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add an Expense Report</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'expenses/style.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <div class="container">
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link active" href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/addusers">Add a user</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/addcompanies">Add a company</a>
+            </li>
+            <li class="nav-item">
+                    <a class="nav-link" href="/addprojects">Add a project</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+        {% if messages %}
+        <div class="error_message">
+            {% for message in messages %}
+                <p >**{{ message }}**</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    
+        <div class="content">
+
+            <h6> Start a new expense report:</h6>
+            <form action="/addreport" method="post" id="reportForm">
+                {% csrf_token %}
+                <label for="name">Report name:</label>
+                <input type="text" name="name" placeholder = "i.e 3/5/18 TL Expense Report">
+                <label for="period">Period Ending:</label>
+                <input type="date" name="period">
+                <label for="admin">Employee Name:</label>
+                    <select name="admin">
+                        <option value="">Select</option>
+                        {% for user in users %}
+                        <option value="{{user.id}}">{{user.first_name}} {{user.last_name}}</option>
+                        {% endfor %}
+                    </select>
+                <input type="submit" class="btn btn-primary" value="Add" id="expenseButton">
+            </form>
+        <hr/>
+        </div>
+        
+        <div class="expenses" style="margin: 15px; padding: 5px;">
+            <h6>Current Receipt:</h6>
+            <form action="/addreceipt/{{reportID}}", method="post" id="receipt" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="date">Date:</label>
+                <input type="date" name="date">
+                <label for="vendor">Vendor:</label>
+                <input type="text" name="vendor">
+                <label for="category">Type:</label>
+                    <select name="category">
+                        <option value="">Select:</option>
+                        <option value="parking">Parking</option>
+                        <option value="mileage">Mileage</option>
+                        <option value="meals">Meals</option>
+                        <option value="Supplies">Supplies</option>
+                        <option value="copy">Copy and Prints</option>
+                        <option value="other">Other</option>
+                    </select>
+                <label for="amount">Amount:</label>
+                <input type="decimal" name="amount">
+                <label for="desc">Description:</label>
+                <input type="text" name="desc">
+                <label for="job">Project Allocation(s):</label>
+                <select name="job">
+                    <option value="">Select your Project:</option>
+                {% for project in projects %}    
+                    <option value="{{project.id}}">id-{{project.id}} | {{project.title}} with {{project.project.name}}</option>
+                {% endfor %}
+                </select>
+                <input type="file" name="image" accept="file_extension|audio/*|video/*|image/*|media_type">
+                <input type="submit" class="btn btn-primary" value="Add">
+            </form>
+        </div>
+        <hr/>
+        <div class="tableform">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Receipt No</th>
+                        <th>Date</th>
+                        <th>Vendor</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                        <th>Receipt Copy</th>
+                        <th>Project allocated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for receipt in receipts %}
+                    <tr>
+                        <td>{{receipt.id}}</td>
+                        <td>{{receipt.date}}</td>
+                        <td>{{receipt.vendor}}</td>
+                        <td>{{receipt.category}}</td>
+                        <td>{{receipt.amount}}</td>
+                        <td>{{receipt.desc}}</td>
+                        <td>{{receipt.image}}</td>
+                        <td><a href="/project/summary/{{receipt.job.id}}">{{receipt.job.id}} | {{receipt.job.title}}</a></td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>    
+            <a id="finalize" href="/report/reset" style="margin-left:50px;"><button>Finalize</button></a>
+                
+        </div>        
+    </div>    
+        <script>
+            $('.tableform').hide()
+            $('#reportForm').submit(function(e){
+                e.preventDefault();
+                
+                $.ajax({
+                    url = $(this).attr('action'),
+                    data = $(this).serialize(),
+                    method = 'post',
+                    success : function(serverResponse){
+                       
+                    }
+                })
+            })
+            $('#receipt').submit(function(e){
+                e.preventDefault()
+                $.ajax({
+                    url : $(this).attr('action'),
+                    data : $(this).serialize(),
+                    method : 'post',
+                    success : function(serverResponse){
+                        $('.tableform').append(serverResponse)
+                    }
+                })
+            })
+            //$('#finalize').click(function(){
+              //  $('.expenses').hide();
+            //})
+        </script>
+</body>
+</html>

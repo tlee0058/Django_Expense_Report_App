@@ -1,0 +1,3 @@
+{% for user in users %}
+<p><a href="/showusers/{{user.id}}" style="text-decoration:underline" class="list-group-item list-group-item-action list-group-item-info">{{user.id}} | {{user.first_name}} {{user.last_name}} {{user.email}}</a></p>
+{% endfor %} 

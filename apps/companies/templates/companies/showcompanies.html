@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Company Details</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link active" href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/addcompanies">Add a new Company</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/viewcompanies">View other Companies</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+        <h6>Company Profile:</h6>
+        <div class="list-group">
+            <a href="#!" class="list-group-item list-group-item-action flex-column align-items-start active">
+                <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{company.name}}</h5>
+                <small>Created on: {{company.created_at}} Last modified: {{company.updated_at}}</small>
+                </div>
+                <p class="mb-1">Address: {{company.address}}, {{company.city}} {{company.state}} {{company.zip_code}}</p>
+                <p class="mb-1">Tax ID: {{company.taxid}}</p>
+                <p class="mb-1">Phone: {{company.phone}}</p>
+                <p class="mb-1">Email: {{company.email}}</p>
+                <p class="mb-1">Fax: {{company.fax}}</p>
+                <p class="mb-1">Website: {{company.website}}</p>
+            </a>
+        </div>
+
+        <hr/>
+        <h5>Edit -</h5>
+
+        {% if messages %}
+        <div class="error_message">
+            {% for message in messages %}
+                <p >**{{ message }}**</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <h6>Company Profile:</h6>
+        <div class="input-group input-group-sm" id="info">
+            
+            <form action="/showcompanies/{{company.id}}", method="post">
+                {% csrf_token %}
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Name:</span>
+                
+                <input type="text" name="name" value="{{company.name}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Address:</span>
+                
+                <input type="text" name="address" value="{{company.address}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">City:</span>
+                
+                <input type="text" name="city" value="{{company.city}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">State:</span>
+                
+                <input type="text" name="state" value="{{company.state}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Zip Code:</span>
+                
+                <input type="text" name="zip_code" value="{{company.zip_code}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Tax id:</span>
+                
+                <input type="text" name="taxid" value="{{company.taxid}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Phone:</span>
+                
+                <input type="text" name="phone" value="{{company.phone}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">email:</span>
+                
+                <input type="email" name="email" value="{{company.email}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Fax:</span>
+                
+                <input type="text" name="fax" value="{{company.fax}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Website:</span>
+                
+                <input type="text" name="website" value="{{company.website}}" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                </div>
+            
+                <input type="submit" class="btn btn-primary mb-2" value="Edit">
+                <p><a href="/companies/delete/{{company.id}}"><button id="delete" type="button" class="btn btn-outline-warning">Delete</button></a></p>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
